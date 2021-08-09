@@ -1,7 +1,8 @@
 import React,{useEffect, useState} from 'react'
-import { StyleSheet, Text, View, StatusBar, Button, TextInput, TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, Alert } from 'react-native'
 import { useDispatch,useSelector } from 'react-redux'
 import {login,register} from '../redux/actions/auth'
+
 
 const Auth = ({navigation}) => {
     const [Login, setLogin] = useState(true)
@@ -11,9 +12,8 @@ const Auth = ({navigation}) => {
     const [confirmPassword,setConfirmPassword] = useState('')
 
     const dispatch = useDispatch() 
-    const errors = useSelector(state=>state.auth)
-    console.log(errors)
- 
+    const {errors} = useSelector(state=>state.auth)
+
     const options = {
         title: Login ? 'Login':"Register",
         headerStyle:{
@@ -21,13 +21,6 @@ const Auth = ({navigation}) => {
         },
         headerTintColor:'#fff'
     }
-
-    // useEffect(async () => {
-    //     let user = await AsyncStorage.getItem('user')
-    //     if(user){
-    //         navigation.replace("Home")
-    //     }
-    // }, [navigation])
 
     useEffect(() => {
         navigation.setOptions(options)
@@ -50,13 +43,13 @@ const Auth = ({navigation}) => {
             <StatusBar backgroundColor ='#1f1b24' barStyle='light-content'></StatusBar>
 
             {!Login && <TextInput style={styles.input} value={name} onChangeText={v=>setName(v)} placeholder='Name' textContentType='name'/>}
-            {!Login && errors && (<Text style={styles.text}>{errors.name}</Text>)}
+            {!Login && errors && (<Text style={styles.red}>{errors.name}</Text>)}
 
             <TextInput style={styles.input} value={email} onChangeText={(val)=>setEmail(val)} placeholder="Email" textContentType='emailAddress' />
-            {errors && (<Text style={styles.text}>{errors.email}</Text>)}
+            {errors && (<Text style={styles.red}>{errors.email}</Text>)}
 
             <TextInput style={styles.input} value={password} onChangeText={v=>setPassword(v)} placeholder='Password' textContentType='password' />
-            {errors && (<Text style={styles.text}>{errors.password}</Text>)}
+            {errors && (<Text style={styles.red}>{errors.password}</Text>)}
 
             {!Login && <TextInput style={styles.input} value={confirmPassword} onChangeText={v=>setConfirmPassword(v)} placeholder='Confirm Password' textContentType='password' />}
             
@@ -78,10 +71,13 @@ const styles = StyleSheet.create({
     text:{
       color:'#ffffff'
     },
+    red:{
+        color:'red'
+    },
     input:{
         width:300,
         height:40,
-        backgroundColor:'#ffffff',
+        backgroundColor:'#1f1b24',
         marginTop:10
     },
     btnMain:{
